@@ -161,9 +161,13 @@ public class ArrayDeque<T>
 
     public T get(int index)
     {
-        if(index>=nextFirst+1&&index<=nextLast-1)
+        if(isEmpty())
+            return null;
+        int start = (nextFirst+1)%maxsize;
+        int realIndex = (start + index) % maxsize;
+        if(index>=0&&index<size)
         {
-            return array[index];
+            return array[realIndex];
         }
         else return null;
     }

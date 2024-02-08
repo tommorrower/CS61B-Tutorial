@@ -9,4 +9,6 @@ import static org.junit.Assert.*;
  */
 public class TestBuggyAList {
   // YOUR TESTS HERE
+    AListNoResizing<Integer> L1 = new AListNoResizing<>();
+    BuggyAList<Integer> L2 = new BuggyAList<>();
 }

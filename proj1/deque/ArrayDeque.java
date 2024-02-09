@@ -1,6 +1,6 @@
 package deque;
 import java.lang.reflect.Array;
-public class ArrayDeque<T>
+public class ArrayDeque<T> implements Deque<T>
 {
     public T[] array;
     private int nextFirst;
@@ -25,6 +25,19 @@ public class ArrayDeque<T>
         double usage = (double)size/(double)maxsize;
         return maxsize < 16 || usage > 0.25;
     }
+
+    public void circularCopy(T[]old, int start, T[]fresh, int length)
+    {
+        for(int cnt=0;cnt<size;cnt++)
+        {
+            if(start==size)
+            {
+                start=0;
+            }
+            fresh[cnt] = old[start];
+            start++;
+        }
+    }
     public void resizeSmaller()
     {
         int start = (nextFirst+1) % maxsize;
@@ -37,7 +50,7 @@ public class ArrayDeque<T>
         }
         maxsize = new_maxsize;
         T []newArray = (T[])new Object [maxsize];
-        System.arraycopy(array,start,newArray,0,size);
+        circularCopy(array,start,newArray,size);
         array = newArray;
         nextFirst = maxsize-1;
         nextLast = size;
@@ -47,14 +60,21 @@ public class ArrayDeque<T>
     {
         int start = (nextFirst+1) % maxsize;
         double factor = 1.2;
-        maxsize = (int)(maxsize*factor);
+        int new_maxsize = maxsize;
+        while(new_maxsize == maxsize)
+        {
+            new_maxsize = (int)(maxsize*factor);
+            factor+=0.1;
+        }
+        maxsize = new_maxsize;
         T[] newArray = (T[])new Object[maxsize];
-        System.arraycopy(array,start,newArray,0,size);
+        circularCopy(array, start, newArray, size);
         array=newArray;
         nextFirst = maxsize-1;
         nextLast = size;
 
     }
+    @Override
     public void addFirst(T data)
     {
         if(isEmpty())
@@ -75,6 +95,7 @@ public class ArrayDeque<T>
         }
     }
 
+@Override
     public void addLast(T data)
     {
         if(isEmpty())
@@ -98,17 +119,12 @@ public class ArrayDeque<T>
         }
 
     }
-
-    public boolean isEmpty()
-    {
-        return size==0;
-    }
-
+@Override
     public int size()
     {
         return size;
     }
-
+@Override
     public void printDeque()
     {
         for(int cnt = 0,index = (nextFirst+1)%maxsize;cnt<size;cnt++,index++)
@@ -121,7 +137,7 @@ public class ArrayDeque<T>
             System.out.println();
         }
     }
-
+@Override
     public T removeFirst()
     {
         if(isEmpty())
@@ -134,7 +150,7 @@ public class ArrayDeque<T>
         size--;
         return ans;
     }
-
+@Override
     public T removeLast()
     {
         if(isEmpty())
@@ -158,7 +174,7 @@ public class ArrayDeque<T>
         return ans;
 
     }
-
+@Override
     public T get(int index)
     {
         if(isEmpty())

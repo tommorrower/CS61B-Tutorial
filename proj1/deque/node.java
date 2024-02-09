@@ -9,11 +9,10 @@ public class node<Item>
     //pint at the next
 
     //constructor
-    public node(Item value, node<Item> PREV, node<Item> NEXT)
-    {
-        data=value;
-        prev=PREV;
-        next=NEXT;
+    public node(Item value, node<Item> PREV, node<Item> NEXT) {
+        data = value;
+        prev = PREV;
+        next = NEXT;
     }
 
 }

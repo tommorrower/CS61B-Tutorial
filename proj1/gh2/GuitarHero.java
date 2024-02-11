@@ -39,7 +39,7 @@ public class GuitarHero {
             StdAudio.play(sample);
 
             /* advance the simulation of each guitar string by one step */
-            for (int i = 0; i < keyboard.length(); i++){
+            for (int i = 0; i < keyboard.length(); i++) {
                 keyList.get(i).tic();
             }
         }

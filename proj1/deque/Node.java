@@ -1,14 +1,14 @@
 package deque;
 
-public class node<Item> {
+public class Node<Item> {
     Item data;
-    node<Item> prev;
+    Node<Item> prev;
     //point at the previous
-    node<Item> next;
+    Node<Item> next;
     //pint at the next
 
     //constructor
-    public node(Item value, node<Item> front, node<Item> rear) {
+    public Node(Item value, Node<Item> front, Node<Item> rear) {
         data = value;
         prev = front;
         next = rear;

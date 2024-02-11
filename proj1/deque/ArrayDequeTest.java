@@ -111,12 +111,16 @@ public class ArrayDequeTest {
     @Test
     public void test1() {
         ArrayDeque<Integer> lld = new ArrayDeque<>();
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<>();
         for(int i = 0; i < 10; i += 1) {
             lld.addFirst(i);
+            lld2.addFirst(i);
         }
-        for(int i = 0; i < 11; i += 1) {
+        for(int i = 0; i < 5; i += 1) {
             System.out.println(lld.removeLast());
+            System.out.println(lld2.removeLast());
         }
+        System.out.println(lld2.equals(lld));
     }
 
     @Test

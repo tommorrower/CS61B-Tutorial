@@ -45,7 +45,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             nextLast = 1;
             array[0] = data;
             nextFirst = array.length - 1;
-        }else {
+        } else {
             array[nextFirst] = data;
             if (nextFirst == 0) {
                 nextFirst = array.length - 1;

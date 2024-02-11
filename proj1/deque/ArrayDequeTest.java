@@ -108,6 +108,16 @@ public class ArrayDequeTest {
 
 
     }
+    @Test
+    public void test1() {
+        ArrayDeque<Integer> lld = new ArrayDeque<>();
+        for(int i = 0; i < 10; i += 1) {
+            lld.addFirst(i);
+        }
+        for(int i = 0; i < 11; i += 1) {
+            System.out.println(lld.removeLast());
+        }
+    }
 
     @Test
     /* Add large number of elements to deque; check if order is correct. */

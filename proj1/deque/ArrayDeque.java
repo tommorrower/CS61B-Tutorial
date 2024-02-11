@@ -15,16 +15,16 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         size = 0;
         maxsize = 8;
     }
-    public boolean isFull() {
+    private boolean isFull() {
         return size == maxsize;
     }
 
-    public boolean isUsed() {
+    private boolean isUsed() {
         double usage = (double) size / (double) maxsize;
         return maxsize < 16 || usage > 0.25;
     }
 
-    public void circularCopy(T[]old, int start, T[]fresh, int length) {
+    private void circularCopy(T[]old, int start, T[]fresh, int length) {
         for (int cnt = 0; cnt < size; cnt++) {
             if (start == size) {
                 start = 0;
@@ -33,142 +33,147 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             start++;
         }
     }
-    public void resizeSmaller() {
-        int start = (nextFirst+1) % maxsize;
-        double usage = 0.25;//which is bigger than 0.25
-        int new_maxsize = maxsize;
-        while (new_maxsize == maxsize) {
-            new_maxsize = (int) (size/usage);
-            usage+=0.1;
+    private void resizeSmaller() {
+        int start = (nextFirst + 1) % maxsize;
+        double usage = 0.25; //which is bigger than 0.25
+        int newMaxSize = maxsize;
+        while (newMaxSize == maxsize) {
+            newMaxSize = (int) (size / usage);
+            usage += 0.1;
         }
-        maxsize = new_maxsize;
+        maxsize = newMaxSize;
         T[] newArray = (T[]) new Object [maxsize];
-        circularCopy(array,start,newArray,size);
+        circularCopy(array, start, newArray, size);
         array = newArray;
-        nextFirst = maxsize-1;
+        nextFirst = maxsize - 1;
         nextLast = size;
     }
 
-    public void resizeBigger() {
-        int start = (nextFirst+1) % maxsize;
+    private void resizeBigger() {
+        int start = (nextFirst + 1) % maxsize;
         double factor = 1.2;
-        int new_maxsize = maxsize;
-        while(new_maxsize == maxsize) {
-            new_maxsize = (int) (maxsize*factor);
-            factor+=0.1;
+        int newMaxSize = maxsize;
+        while (newMaxSize == maxsize) {
+            newMaxSize = (int) (maxsize * factor);
+            factor += 0.1;
         }
-        maxsize = new_maxsize;
+        maxsize = newMaxSize;
         T[] newArray = (T[]) new Object[maxsize];
         circularCopy(array, start, newArray, size);
         array = newArray;
-        nextFirst = maxsize-1;
+        nextFirst = maxsize - 1;
         nextLast = size;
 
     }
     @Override
     public void addFirst(T data) {
-        if(isEmpty()) {
-            nextLast++;
-        }
-        if(isFull()) {
+        if (isFull()) {
             resizeBigger();
         }
-        size++;
+        size += 1;
+        if (isEmpty()) {
+            nextLast++;
+        }
         array[nextFirst] = data;
-        if(nextFirst == 0) {
-            nextFirst = maxsize-1;
+        if (nextFirst == 0) {
+            nextFirst = maxsize - 1;
         } else {
             nextFirst--;
         }
     }
 
-@Override
+    @Override
     public void addLast(T data) {
-        if(isEmpty()) {
+        if (isEmpty()) {
             addFirst(data);
             return;
         }
-        if(isFull()) {
+        if (isFull()) {
             resizeBigger();
         }
-        size++;
+        size += 1;
         array[nextLast] = data;
-        if(nextLast == maxsize-1) {
+        if (nextLast == maxsize - 1) {
             nextLast = 0;
         } else {
             nextLast++;
         }
 
     }
-@Override
+    @Override
     public int size() {
         return size;
     }
-@Override
+    @Override
     public void printDeque() {
-        for(int cnt = 0, index = (nextFirst+1) % maxsize; cnt < size;cnt++, index++) {
-            if(index >= array.length) {
+        for (int cnt = 0, index = (nextFirst + 1) % maxsize; cnt < size; cnt++, index++) {
+            if (index >= array.length) {
                 index %= array.length;
             }
-            System.out.print(array[index]+" ");
+            System.out.print(array[index] + " ");
             System.out.println();
         }
     }
-@Override
+    @Override
     public T removeFirst() {
-        if(isEmpty()){
+        if (isEmpty()) {
             return null;
         }
-        T ans = array[(nextFirst+1) % maxsize];
-        array[(nextFirst+1) % maxsize] = null;
-        nextFirst = (nextFirst+1) % maxsize;
-        if(size == 1) {
+        T ans = array[(nextFirst + 1) % maxsize];
+        array[(nextFirst + 1) % maxsize] = null;
+        nextFirst = (nextFirst + 1) % maxsize;
+        if (size == 1) {
             nextLast--;
         }
         size--;
+        if(!isUsed()) {
+            resizeSmaller();
+        }
         return ans;
     }
-@Override
+    @Override
     public T removeLast() {
-        if(isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
         T ans;
-        if(nextLast == 0) {
-            ans = array[maxsize-1];
-            array[maxsize-1] = null;
-            nextLast = maxsize-1;
+        if (nextLast == 0) {
+            ans = array[maxsize - 1];
+            array[maxsize - 1] = null;
+            nextLast = maxsize - 1;
         } else {
-            ans = array[nextLast-1];
-            array[nextLast-1] = null;
-            nextLast--;
+            ans = array[nextLast - 1];
+            array[nextLast - 1] = null;
+            nextLast -= 1;
         }
-        if(size == 1) {
+        if (size == 1) {
             nextFirst = 0;
         }
-        size--;
+        size -= 1;
+        if(!isUsed()) {
+            resizeSmaller();
+        }
         return ans;
 
     }
-@Override
+    @Override
     public T get(int index) {
-        if(isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
-        int start = (nextFirst+1) % maxsize;
+        if(index > maxsize - 1 || index < 0) {
+            return null;
+        }
+        int start = (nextFirst + 1) % maxsize;
         int realIndex = (start + index) % maxsize;
-        if(index >= 0 && index < size) {
-            return array[realIndex];
-        } else {
-            return null;
-        }
+        return array[realIndex];
     }
     public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
     private class ArrayDequeIterator implements Iterator<T> {
         private int pos;
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             pos = 0;
         }
         @Override
@@ -177,32 +182,30 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
         @Override
         public T next() {
-            T returnItem = array[pos];
+            T returnItem = get(pos);
             pos += 1;
             return returnItem;
         }
     }
     @Override
     public boolean equals(Object o) {
-        if(o == null) {
+        if (o == null) {
             return false;
         }
-        if(o == this) {
+        if (o == this) {
             return true;
         }
-        if(o.getClass() != this.getClass()) {
+        if (!(o instanceof ArrayDeque)) {
             return false;
         }
         ArrayDeque<T> other = (ArrayDeque<T>) o;
-        if(other.size() != this.size()) {
+        if (other.size() != this.size()) {
             return false;
         }
-        int cnt = 0;
-        for(T item : other) {
-            if(this.get(cnt) != item) {
+        for(int i = 0; i < size; i += 1) {
+            if(other.get(i) != this.get(i)) {
                 return false;
             }
-            cnt += 1;
         }
         return true;
     }

@@ -18,7 +18,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (index < 0 || index > size - 1) {
             return null;
         }
-        return getRecursiveHelper(index - 1, sentinel.next);
+        return getRecursiveHelper(index, sentinel.next);
     }
     private class LinkedListDequeIterator implements Iterator<T> {
         private int pos;
@@ -149,7 +149,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if (list.get(i) != get(i)) {
+            if (!list.get(i).equals(get(i))) {
                 return false;
             }
         }

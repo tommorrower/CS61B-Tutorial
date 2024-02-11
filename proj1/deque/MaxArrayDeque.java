@@ -9,7 +9,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
         cmp = c;
     }
     public T max() {
-        if(isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
         return max(cmp);

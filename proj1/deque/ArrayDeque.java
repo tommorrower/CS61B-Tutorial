@@ -26,7 +26,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             start++;
         }
     }
-    public void resize(int capacity) {
+    private void resize(int capacity) {
         int start = (nextFirst + 1) % array.length;
         T[] newArray = (T[]) new Object [capacity];
         circularCopy(array, start, newArray, size);
@@ -35,53 +35,23 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         nextLast = size;
 
     }
-    /*private void resizeSmaller() {
-        int start = (nextFirst + 1) % array.length;
-        double usage = 0.3; //which is bigger than 0.25
-        int newarray.length = array.length;
-        while (newarray.length == array.length) {
-            newarray.length = (int) (size / usage);
-            usage += 0.1;
-        }
-        array.length = newarray.length;
-        T[] newArray = (T[]) new Object [array.length];
-        circularCopy(array, start, newArray, size);
-        array = newArray;
-        nextFirst = array.length - 1;
-        nextLast = size;
-    }
 
-    private void resizeBigger() {
-        int start = (nextFirst + 1) % array.length;
-        double factor = 2;
-        int newarray.length = array.length;
-        while (newarray.length == array.length) {
-            newarray.length = (int) (array.length * factor);
-            factor += 0.1;
-        }
-        array.length = newarray.length;
-        T[] newArray = (T[]) new Object[array.length];
-        circularCopy(array, start, newArray, size);
-        array = newArray;
-        nextFirst = array.length - 1;
-        nextLast = size;
-
-    }
-
-     */
     @Override
     public void addFirst(T data) {
         if (isFull()) {
             resize(size * 2);
         }
         if (isEmpty()) {
-            nextLast++;
-        }
-        array[nextFirst] = data;
-        if (nextFirst == 0) {
+            nextLast = 1;
+            array[0] = data;
             nextFirst = array.length - 1;
-        } else {
-            nextFirst--;
+        }else {
+            array[nextFirst] = data;
+            if (nextFirst == 0) {
+                nextFirst = array.length - 1;
+            } else {
+                nextFirst--;
+            }
         }
         size += 1;
     }
@@ -207,7 +177,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
         for (int i = 0; i < size; i += 1) {
-            if (other.get(i) != this.get(i)) {
+            if (!other.get(i).equals(get(i))) {
                 return false;
             }
         }

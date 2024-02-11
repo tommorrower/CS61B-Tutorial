@@ -139,4 +139,19 @@ public class ArrayDequeTest {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
     }
+    @Test
+    public void test2() {
+        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
+        lld1.addLast(0);
+        lld1.addFirst(1);
+        System.out.println(lld1.get(1));
+        System.out.println(lld1.removeLast());
+        System.out.println(lld1.removeFirst());
+        lld1.addLast(5);
+        System.out.println(lld1.removeFirst());
+        lld1.addLast(7);
+        System.out.println(lld1.removeLast());
+        lld1.addFirst(9);
+        System.out.println(lld1.removeLast());
+    }
 }

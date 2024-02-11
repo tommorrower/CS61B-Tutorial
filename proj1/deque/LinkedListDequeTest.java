@@ -84,6 +84,8 @@ public class LinkedListDequeTest {
         lld1.addFirst("string");
         lld2.addFirst(3.14159);
         lld3.addFirst(true);
+        System.out.println(lld1.getRecursive(1));
+        System.out.println(lld1.getRecursive(0));
 
         String s = lld1.removeFirst();
         double d = lld2.removeFirst();
@@ -120,5 +122,16 @@ public class LinkedListDequeTest {
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
+    }
+
+    @Test
+    public void testEquals() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<Integer>();
+        for (int i = 0; i < 10; i++) {
+            lld1.addLast(i);
+            lld2.addLast(i);
+        }
+        System.out.println(lld1.equals(lld2));
     }
 }

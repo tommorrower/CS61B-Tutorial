@@ -1,5 +1,8 @@
 package deque;
-public class ArrayDeque<T> implements Deque<T> {
+
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] array;
     private int nextFirst;
     private int nextLast;
@@ -50,8 +53,7 @@ public class ArrayDeque<T> implements Deque<T> {
         int start = (nextFirst+1) % maxsize;
         double factor = 1.2;
         int new_maxsize = maxsize;
-        while(new_maxsize == maxsize)
-        {
+        while(new_maxsize == maxsize) {
             new_maxsize = (int) (maxsize*factor);
             factor+=0.1;
         }
@@ -160,5 +162,48 @@ public class ArrayDeque<T> implements Deque<T> {
         } else {
             return null;
         }
+    }
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int pos;
+        public ArrayDequeIterator() {
+            pos = 0;
+        }
+        @Override
+        public boolean hasNext() {
+            return pos < size;
+        }
+        @Override
+        public T next() {
+            T returnItem = array[pos];
+            pos += 1;
+            return returnItem;
+        }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if(o == null) {
+            return false;
+        }
+        if(o == this) {
+            return true;
+        }
+        if(o.getClass() != this.getClass()) {
+            return false;
+        }
+        ArrayDeque<T> other = (ArrayDeque<T>) o;
+        if(other.size() != this.size()) {
+            return false;
+        }
+        int cnt = 0;
+        for(T item : other) {
+            if(this.get(cnt) != item) {
+                return false;
+            }
+            cnt += 1;
+        }
+        return true;
     }
 }
